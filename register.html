@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Register</title>
+    <link rel="stylesheet" href="css\lstyle.css">
+
+
+    <!-- Firebase v8 SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKc-imbFRAM9p1fjvDcs4vwCtQySDhkQE",
+            authDomain: "car1-dbe21.firebaseapp.com",
+            projectId: "car1-dbe21",
+            storageBucket: "car1-dbe21.firebasestorage.app",
+            messagingSenderId: "1007776406913",
+            appId: "1:1007776406913:web:5c59ad766b7d9f66ec1c80"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <input type="text" placeholder="Username" id="register-username" required>
+            <input type="email" placeholder="Email" id="register-email" required>
+            <input type="tel" placeholder="Mobile Number" id="register-mobile" pattern="[0-9]{10}" required>
+            <input type="password" placeholder="Password" id="register-password" required>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Login</a></p>
+    </div>
+
+    <script>
+        // Get Firebase services
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Registration handler
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const username = document.getElementById('register-username').value;
+            const mobile = document.getElementById('register-mobile').value;
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Save additional user data to Firestore
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        username: username,
+                        email: email,
+                        mobile: mobile,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        // Store user info in localStorage
+                        localStorage.setItem('car_rental_user', JSON.stringify({
+                            name: username,
+                            email: email,
+                            contact: mobile
+                        }));
+                    });
+                })
+                .then(() => {
+                    alert('Registration successful!');
+                    window.location.href = 'login.html';
+                })
+                .catch((error) => {
+                    alert('Registration failed: ' + error.message);
+                    console.error(error);
+                });
+        });
+    </script>
+
+    <script src="js\main.js"></script>
+    <script src="js\new.js"></script>
+</body>
+
+</html>

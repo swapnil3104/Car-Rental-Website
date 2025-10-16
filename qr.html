@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental - Payment & Booking</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .content {
+            display: flex;
+            padding: 30px;
+            gap: 40px;
+        }
+
+        .car-details {
+            flex: 1;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .car-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .car-image-container {
+            height: 220px;
+            background: #e0e6ed;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .car-image {
+            font-size: 8rem;
+            color: #2c3e50;
+        }
+
+        .driver-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #3498db;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .car-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .spec-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .spec-icon {
+            font-size: 1.5rem;
+            color: #3498db;
+        }
+
+        .spec-text {
+            font-size: 0.95rem;
+        }
+
+        .spec-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .price-container {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .price-label {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .price-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .price-duration {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .driver-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border-left: 4px solid #3498db;
+        }
+
+        .driver-title {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #90caf9;
+        }
+
+        .driver-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .driver-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .driver-icon {
+            font-size: 1.2rem;
+            color: #3498db;
+            min-width: 24px;
+        }
+
+        .driver-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-right: 5px;
+        }
+
+        .driver-value {
+            color: #333;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .rating-stars {
+            color: #FFD700;
+        }
+
+        .qr-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .qr-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .qr-subtitle {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 400px;
+        }
+
+        .qr-container {
+            width: 260px;
+            height: 260px;
+            background: white;
+            border: 15px solid #f8f9fa;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #qrcode {
+            width: 180px;
+            height: 180px;
+        }
+
+        .payment-instructions {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            border-left: 4px solid #3498db;
+        }
+
+        .instructions-title {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions-list {
+            padding-left: 20px;
+        }
+
+        .instructions-list li {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .booking-confirmation {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border-left: 4px solid #4CAF50;
+            display: none;
+        }
+
+        .confirmation-title {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .confirmation-message {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .confirmation-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .confirmation-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .confirmation-value {
+            color: #333;
+        }
+
+        .email-confirmation {
+            background: #d1ecf1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .car-models {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e6ed;
+        }
+
+        .model-badge {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .model-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .model-badge.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .model-badge i {
+            color: #3498db;
+        }
+
+        .model-badge.active i {
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .booking-form {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-input {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .payment-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .payment-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .scan-prompt {
+            text-align: center;
+            color: #e74c3c;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .show-confirmation {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(52, 152, 219, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+            }
+        }
+
+        .simulate-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .simulate-btn:hover {
+            background: #219653;
+            transform: translateY(-2px);
+        }
+
+        .simulate-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Dynamic custom amount QR section */
+        .custom-qr {
+            margin-top: 20px;
+            background: #ffffff;
+            border: 1px solid #e0e6ed;
+            padding: 15px 18px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .custom-qr h4 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .custom-qr .custom-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .custom-qr input[type="number"] {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all .25s;
+        }
+
+        .custom-qr input[type="number"]:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .custom-qr button {
+            background: #6c5ce7;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background .3s, transform .3s;
+        }
+
+        .custom-qr button:hover {
+            background: #5947d6;
+            transform: translateY(-2px);
+        }
+
+        .custom-qr small {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: #7f8c8d;
+        }
+
+        .qr-amount {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .qr-amount-value {
+            color: #e74c3c;
+        }
+
+        .payment-timer {
+            text-align: center;
+            font-weight: 600;
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .payment-verification {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 3px solid #3498db;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                padding: 20px;
+                gap: 30px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .driver-details {
+                grid-template-columns: 1fr;
+            }
+
+            .confirmation-details {
+                grid-template-columns: 1fr;
+            }
+
+            .custom-row {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .custom-row input {
+                width: 100%;
+            }
+
+            .custom-row button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .car-specs {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="ri-car-fill"></i>
+                </div>
+                <div class="logo-text">Premium Car Rental</div>
+            </div>
+            <div class="nav-buttons">
+                <a href="javascript:void(0)" class="nav-btn" id="back-btn">
+                    <i class="ri-arrow-left-line"></i> Back to Cars
+                </a>
+                <a href="index.html" class="nav-btn" id="home-btn">
+                    <i class="ri-home-line"></i> Home
+                </a>
+                <script>
+                    // Navigation button handlers
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var backBtn = document.getElementById('back-btn');
+                        if (backBtn) {
+                            backBtn.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                if (window.history.length > 1) {
+                                    window.history.back();
+                                } else {
+                                    window.location.href = 'index.html';
+                                }
+                            });
+                        }
+                        var homeBtn = document.getElementById('home-btn');
+                        if (homeBtn) {
+                            homeBtn.addEventListener('click', function (e) {
+                                // Always go to homepage
+                                window.location.href = 'index.html';
+                            });
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="car-details">
+                <h1 class="car-title" id="car-name">Tesla Model S</h1>
+
+                <div class="car-image-container">
+                    <div class="car-image" id="car-image">
+                        <img id="car-img" src="assets/deals-1.png" alt="Car Image"
+                            style="max-width:100%;max-height:180px;object-fit:contain;">
+                    </div>
+                    <div class="driver-badge">Driver Assigned</div>
+                </div>
+
+                <div class="car-specs">
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <i class="ri-group-line"></i>
+                        </div>
+                        <div class="spec-text">
+                            Capacity: <span class="spec-value" id="capacity">4 People</span>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <i class="ri-steering-2-line"></i>
+                        </div>
+                        <div class="spec-text">
+                            Transmission: <span class="spec-value" id="transmission">Automatic</span>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <i class="ri-gas-station-line"></i>
+                        </div>
+                        <div class="spec-text">
+                            Fuel: <span class="spec-value" id="fuel">Electric</span>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <i class="ri-dashboard-3-line"></i>
+                        </div>
+                        <div class="spec-text">
+                            Mileage: <span class="spec-value" id="mileage">400 km</span>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <i class="ri-speed-line"></i>
+                        </div>
+                        <div class="spec-text">
+                            Top Speed: <span class="spec-value" id="speed">200 km/h</span>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <i class="ri-settings-5-line"></i>
+                        </div>
+                        <div class="spec-text">
+                            Engine: <span class="spec-value" id="engine">Dual Motor</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-container">
+                    <div class="price-label">Price Per Km</div>
+                    <div class="price-value">₹<span id="price">18</span></div>
+                    <div class="price-duration">Inclusive of all taxes</div>
+                </div>
+
+                <div class="driver-info">
+                    <h3 class="driver-title">
+                        <i class="ri-user-3-line"></i> Driver Information
+                    </h3>
+                    <div class="driver-details">
+                        <div class="driver-item">
+                            <div class="driver-icon">
+                                <i class="ri-user-line"></i>
+                            </div>
+                            <div class="driver-text">
+                                <span class="driver-label">Name:</span>
+                                <span class="driver-value" id="driver-name">Rajesh Kumar</span>
+                            </div>
+                        </div>
+
+                        <div class="driver-item">
+                            <div class="driver-icon">
+                                <i class="ri-phone-line"></i>
+                            </div>
+                            <div class="driver-text">
+                                <span class="driver-label">Contact:</span>
+                                <span class="driver-value" id="driver-contact">+91 98765 43210</span>
+                            </div>
+                        </div>
+
+                        <div class="driver-item">
+                            <div class="driver-icon">
+                                <i class="ri-star-line"></i>
+                            </div>
+                            <div class="driver-text">
+                                <span class="driver-label">Rating:</span>
+                                <span class="driver-value rating">
+                                    <span class="rating-stars">★★★★★</span>
+                                    <span id="driver-rating">4.8/5</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="driver-item">
+                            <div class="driver-icon">
+                                <i class="ri-translate-2"></i>
+                            </div>
+                            <div class="driver-text">
+                                <span class="driver-label">Languages:</span>
+                                <span class="driver-value" id="driver-languages">English, Hindi, Tamil</span>
+                            </div>
+                        </div>
+
+                        <div class="driver-item">
+                            <div class="driver-icon">
+                                <i class="ri-time-line"></i>
+                            </div>
+                            <div class="driver-text">
+                                <span class="driver-label">Availability:</span>
+                                <span class="driver-value" id="driver-availability">24/7 Available</span>
+                            </div>
+                        </div>
+
+                        <div class="driver-item">
+                            <div class="driver-icon">
+                                <i class="ri-car-line"></i>
+                            </div>
+                            <div class="driver-text">
+                                <span class="driver-label">Experience:</span>
+                                <span class="driver-value" id="driver-experience">8 years</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="booking-confirmation" id="booking-confirmation">
+                    <h3 class="confirmation-title">
+                        <i class="ri-checkbox-circle-line"></i> Booking Confirmed!
+                    </h3>
+                    <div class="confirmation-message">
+                        <p>Your booking for the <span id="confirmation-car">Tesla Model S</span> has been successfully
+                            confirmed. A confirmation email with all details has been sent to your email address and to
+                            <span id="sent-email">apurvam944@gmail.com</span>.
+                        </p>
+                    </div>
+
+                    <div class="confirmation-details">
+                        <div class="confirmation-item">
+                            <div class="confirmation-label">Booking ID</div>
+                            <div class="confirmation-value" id="booking-id">CRB-2025-7864</div>
+                        </div>
+                        <div class="confirmation-item">
+                            <div class="confirmation-label">Car Model</div>
+                            <div class="confirmation-value" id="confirmation-model">Tesla Model S</div>
+                        </div>
+                        <div class="confirmation-item">
+                            <div class="confirmation-label">Price Per Day</div>
+                            <div class="confirmation-label">Price Per Km</div>
+                            <div class="confirmation-value">₹<span id="confirmation-price">18</span></div>
+                        </div>
+                        <div class="confirmation-item">
+                            <div class="confirmation-label">Driver Name</div>
+                            <div class="confirmation-value" id="confirmation-driver">Rajesh Kumar</div>
+                        </div>
+                        <div class="confirmation-item">
+                            <div class="confirmation-label">Booking Date</div>
+                            <div class="confirmation-value" id="booking-date">June 16, 2025</div>
+                        </div>
+                        <div class="confirmation-item">
+                            <div class="confirmation-label">Booking Status</div>
+                            <div class="confirmation-value" style="color:#27ae60;font-weight:600">Confirmed</div>
+                        </div>
+                        <div class="confirmation-item">
+                            <div class="confirmation-label">Number of Days</div>
+                            <div class="confirmation-value" id="confirmation-days">1</div>
+                        </div>
+                        <div class="confirmation-item">
+                            <div class="confirmation-label">Total Amount</div>
+                            <div class="confirmation-label">Total Amount</div>
+                            <div class="confirmation-value">₹<span id="confirmation-total">18</span></div>
+                        </div>
+                    </div>
+
+                    <div class="email-confirmation">
+                        <i class="ri-mail-send-line" style="font-size:1.5rem;color:#3498db"></i>
+                        <div>Confirmation email sent to <strong id="confirmation-email">user@example.com</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qr-section">
+
+                <div class="booking-form" id="booking-form">
+                    <h3 class="instructions-title">
+                        <i class="ri-user-line"></i> Complete Your Booking
+                    </h3>
+                    <div class="form-group">
+                        <label class="form-label" for="user-name">Your Full Name</label>
+                        <input type="text" id="user-name" class="form-input" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="user-email">Email Address</label>
+                        <input type="email" id="user-email" class="form-input" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="user-phone">Phone Number</label>
+                        <input type="tel" id="user-phone" class="form-input" placeholder="Enter your phone number">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="pickup-city">Pick up City</label>
+                        <select id="pickup-city" class="form-input city-dropdown" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="return-city">Return City</label>
+                        <select id="return-city" class="form-input city-dropdown" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="pickup-date">Pick up Date</label>
+                        <input type="date" id="pickup-date" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="return-date">Return Date</label>
+                        <input type="date" id="return-date" class="form-input" required>
+                    </div>
+                    <!-- Number of days is computed from pickup/return dates; input removed -->
+                    <div class="form-group">
+                        <label class="form-label">Distance (km)</label>
+                        <input type="text" id="distance-display" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Total Fare (₹)</label>
+                        <input type="text" id="fare-display" class="form-input" readonly>
+                    </div>
+                    <button class="submit-btn" id="submit-booking">
+                        <i class="ri-wallet-line"></i> Proceed to Payment
+                    </button>
+                    <div class="payment-status payment-success" id="payment-status">
+                        <i class="ri-checkbox-circle-line"></i>
+                        <span>Payment successful!</span>
+                    </div>
+                    <!-- End primary booking form -->
+                </div>
+                <!-- Added QR payment UI elements that script expects -->
+                <div class="qr-container" id="qr-container" style="display:none">
+                    <div id="qrcode"></div>
+                </div>
+                <div class="scan-prompt" id="scan-prompt">
+                    <i class="ri-qr-code-line" style="font-size:1.3rem"></i> Scan the QR with any UPI app to pay
+                </div>
+                <div class="qr-amount" id="qr-amount">Amount to Pay: ₹<span class="qr-amount-value"
+                        id="qr-amount-value">0</span></div>
+                <div class="payment-timer" id="payment-timer" style="display:none">Time left: <span
+                        id="timer">05:00</span></div>
+                <div class="payment-verification" id="payment-verification"></div>
+                <button class="simulate-btn" id="simulate-btn" style="display:none">
+                    <i class="ri-checkbox-circle-line"></i> Simulate Payment
+                </button>
+
+                <!-- Custom dynamic amount QR generator -->
+                <div class="custom-qr" id="custom-qr-section">
+                    <h4><i class="ri-money-rupee-circle-line" style="color:#3498db;font-size:1.2rem"></i> Generate QR
+                        For Custom Amount</h4>
+                    <div class="custom-row">
+                        <input type="number" id="custom-amount" min="1" placeholder="Enter amount (₹)" />
+                        <button type="button" id="generate-custom-qr"><i class="ri-qr-code-line"></i> Generate</button>
+                    </div>
+                    <small>Use this if the calculated fare needs adjustment (tolls, parking, discounts, etc.).</small>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="car-models">
+            <div class="model-badge active" data-car="model_s">
+                <i class="ri-car-line"></i> Tesla
+            </div>
+            <div class="model-badge" data-car="mirage">
+                <i class="ri-car-line"></i> Mitsubishi
+            </div>
+            <div class="model-badge" data-car="mazda_CX5">
+                <i class="ri-car-line"></i> Mazda
+            </div>
+            <div class="model-badge" data-car="corolla">
+                <i class="ri-car-line"></i> Toyota
+            </div>
+            <div class="model-badge" data-car="amaze">
+                <i class="ri-car-line"></i> Honda
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Car Rental Service. All rights reserved. | Secure payments | 24/7 Customer Support</p>
+        </div>
+    </div>
+
+    <script>
+        // List of 20 cities
+        const cities = [
+            "Mumbai", "Pune", "Nashik", "Nagpur", "Aurangabad", "Solapur", "Kolhapur", "Satara", "Amravati", "Akola",
+            "Jalgaon", "Latur", "Ahmednagar", "Dhule", "Sangli", "Nanded", "Wardha", "Chandrapur", "Parbhani", "Beed"
+        ];
+
+        // Distance matrix (in km) between cities (symmetric, 20x20)
+        // Example: distances[0][1] is Mumbai to Pune
+        const distances = [
+            [0, 150, 170, 820, 330, 390, 380, 260, 670, 590, 410, 500, 260, 330, 380, 570, 740, 840, 570, 350], // Mumbai
+            [150, 0, 210, 720, 230, 250, 330, 120, 570, 490, 310, 400, 120, 230, 280, 470, 640, 740, 470, 250], // Pune
+            [170, 210, 0, 690, 200, 420, 470, 300, 540, 460, 280, 370, 180, 110, 330, 420, 590, 690, 420, 200], // Nashik
+            [820, 720, 690, 0, 490, 490, 810, 700, 160, 240, 520, 500, 700, 690, 900, 350, 120, 150, 370, 600], // Nagpur
+            [330, 230, 200, 490, 0, 470, 520, 350, 430, 350, 170, 260, 230, 200, 380, 320, 490, 590, 320, 100], // Aurangabad
+            [390, 250, 420, 490, 470, 0, 250, 130, 670, 590, 410, 200, 250, 420, 120, 470, 640, 740, 470, 250], // Solapur
+            [380, 330, 470, 810, 520, 250, 0, 120, 900, 820, 640, 430, 330, 470, 130, 720, 890, 990, 720, 500], // Kolhapur
+            [260, 120, 300, 700, 350, 130, 120, 0, 780, 700, 520, 310, 200, 300, 10, 600, 770, 870, 600, 380], // Satara
+            [670, 570, 540, 160, 430, 670, 900, 780, 0, 80, 360, 340, 570, 540, 750, 190, 60, 90, 210, 440], // Amravati
+            [590, 490, 460, 240, 350, 590, 820, 700, 80, 0, 280, 260, 490, 460, 670, 110, 140, 170, 90, 360], // Akola
+            [410, 310, 280, 520, 170, 410, 640, 520, 360, 280, 0, 190, 310, 280, 490, 230, 400, 500, 230, 70], // Jalgaon
+            [500, 400, 370, 500, 260, 200, 430, 310, 340, 260, 190, 0, 400, 370, 180, 420, 590, 690, 420, 200], // Latur
+            [260, 120, 180, 700, 230, 250, 330, 200, 570, 490, 310, 400, 0, 180, 280, 470, 640, 740, 470, 250], // Ahmednagar
+            [330, 230, 110, 690, 200, 420, 470, 300, 540, 460, 280, 370, 180, 0, 330, 420, 590, 690, 420, 200], // Dhule
+            [380, 280, 330, 900, 380, 120, 130, 10, 750, 670, 490, 180, 280, 330, 0, 600, 770, 870, 600, 380], // Sangli
+            [570, 470, 420, 350, 320, 470, 720, 600, 190, 110, 230, 420, 470, 420, 600, 0, 170, 200, 20, 290], // Nanded
+            [740, 640, 590, 120, 490, 640, 890, 770, 60, 140, 400, 590, 640, 590, 770, 170, 0, 30, 150, 380], // Wardha
+            [840, 740, 690, 150, 590, 740, 990, 870, 90, 170, 500, 690, 740, 690, 870, 200, 30, 0, 180, 410], // Chandrapur
+            [570, 470, 420, 370, 320, 470, 720, 600, 210, 90, 230, 420, 470, 420, 600, 20, 150, 180, 0, 290], // Parbhani
+            [350, 250, 200, 600, 100, 250, 500, 380, 440, 360, 70, 200, 250, 200, 380, 290, 380, 410, 290, 0] // Beed
+        ]
+        // Driver data for different cars
+        const drivers = [
+            {
+                name: "Rajesh Kumar",
+                contact: "+91 98765 43210",
+                rating: "4.8/5",
+                languages: "English, Hindi, Tamil",
+                availability: "24/7 Available",
+                experience: "8 years"
+            },
+            {
+                name: "Vikram Singh",
+                contact: "+91 87654 32109",
+                rating: "4.7/5",
+                languages: "English, Hindi, Punjabi",
+                availability: "Weekdays Only",
+                experience: "6 years"
+            },
+            {
+                name: "Arjun Patel",
+                contact: "+91 76543 21098",
+                rating: "4.9/5",
+                languages: "English, Hindi, Gujarati",
+                availability: "24/7 Available",
+                experience: "10 years"
+            },
+            {
+                name: "Sanjay Gupta",
+                contact: "+91 65432 10987",
+                rating: "4.6/5",
+                languages: "English, Hindi, Bengali",
+                availability: "Weekends Only",
+                experience: "7 years"
+            },
+            {
+                name: "Rahul Sharma",
+                contact: "+91 54321 09876",
+                rating: "4.5/5",
+                languages: "English, Hindi, Marathi",
+                availability: "24/7 Available",
+                experience: "5 years"
+            }
+        ];
+
+        // Car data with details
+        const carData = {
+            model_s: {
+                name: "Mahindra Model S",
+                price: 1800,
+                icon: "🚗",
+                color: "#2c3e50",
+                capacity: "4 People",
+                transmission: "Automatic",
+                fuel: "Electric",
+                mileage: "400 km",
+                speed: "200 km/h",
+                engine: "Dual Motor",
+                driver: drivers[0] // Assign driver
+            },
+            model_e: {
+                name: "Mahindra Model E",
+                price: 1500,
+                icon: "⚡",
+                color: "#3498db",
+                capacity: "4 People",
+                transmission: "Automatic",
+                fuel: "Electric",
+                mileage: "380 km",
+                speed: "190 km/h",
+                engine: "Dual Motor",
+                driver: drivers[1] // Assign driver
+            },
+            model_y: {
+                name: "Mahindra Model Y",
+                price: 1000,
+                icon: "🔋",
+                color: "#e74c3c",
+                capacity: "4 People",
+                transmission: "Automatic",
+                fuel: "Electric",
+                mileage: "350 km",
+                speed: "180 km/h",
+                engine: "Dual Motor",
+                driver: drivers[2] // Assign driver
+            },
+            mirage: {
+                name: "Ford C5",
+                price: 2300,
+                icon: "🇯🇵",
+                color: "#9b59b6",
+                capacity: "5 People",
+                transmission: "Manual",
+                fuel: "Petrol",
+                mileage: "20 km/l",
+                speed: "170 km/h",
+                engine: "1.2L 3-Cylinder",
+                driver: drivers[3] // Assign driver
+            },
+            xpander: {
+                name: "Ford C7",
+                price: 3500,
+                icon: "🚙",
+                color: "#1abc9c",
+                capacity: "7 People",
+                transmission: "Automatic",
+                fuel: "Petrol",
+                mileage: "16 km/l",
+                speed: "180 km/h",
+                engine: "1.5L 4-Cylinder",
+                driver: drivers[4] // Assign driver
+            },
+            pajero_sports: {
+                name: "Ford CX8",
+                price: 1800,
+                icon: "🏔️",
+                color: "#e67e22",
+                capacity: "7 People",
+                transmission: "Automatic",
+                fuel: "Diesel",
+                mileage: "14 km/l",
+                speed: "190 km/h",
+                engine: "2.4L Turbo Diesel",
+                driver: drivers[0] // Assign driver
+            },
+            mazda_CX5: {
+                name: "Suzuki CX5",
+                price: 1300,
+                icon: "🔴",
+                color: "#e74c3c",
+                capacity: "5 People",
+                transmission: "Automatic",
+                fuel: "Petrol",
+                mileage: "17 km/l",
+                speed: "195 km/h",
+                engine: "2.5L SkyActiv-G",
+                driver: drivers[1] // Assign driver
+            },
+            "mazda_CX-30": {
+                name: "Suzuki CX-30",
+                price: 2000,
+                icon: "🔵",
+                color: "#3498db",
+                capacity: "5 People",
+                transmission: "Automatic",
+                fuel: "Petrol",
+                mileage: "18 km/l",
+                speed: "190 km/h",
+                engine: "2.0L SkyActiv-G",
+                driver: drivers[2] // Assign driver
+            },
+            "mazda_CX-9": {
+                name: "Suzuki CX-9",
+                price: 1800,
+                icon: "⚫",
+                color: "#2c3e50",
+                capacity: "7 People",
+                transmission: "Automatic",
+                fuel: "Petrol",
+                mileage: "15 km/l",
+                speed: "200 km/h",
+                engine: "2.5L Turbo SkyActiv-G",
+                driver: drivers[3] // Assign driver
+            },
+            corolla: {
+                name: "Toyota Corolla",
+                price: 1800,
+                icon: "🇯🇵",
+                color: "#e74c3c",
+                capacity: "5 People",
+                transmission: "CVT",
+                fuel: "Hybrid",
+                mileage: "23 km/l",
+                speed: "180 km/h",
+                engine: "1.8L Hybrid",
+                driver: drivers[4] // Assign driver
+            },
+            innova: {
+                name: "Toyota Innova",
+                price: 2500,
+                icon: "🚐",
+                color: "#3498db",
+                capacity: "7 People",
+                transmission: "Automatic",
+                fuel: "Diesel",
+                mileage: "14 km/l",
+                speed: "170 km/h",
+                engine: "2.4L Diesel",
+                driver: drivers[0] // Assign driver
+            },
+            fortuner: {
+                name: "Toyota Fortuner",
+                price: 1900,
+                icon: "🚙",
+                color: "#2c3e50",
+                capacity: "7 People",
+                transmission: "Automatic",
+                fuel: "Diesel",
+                mileage: "12 km/l",
+                speed: "190 km/h",
+                engine: "2.8L Turbo Diesel",
+                driver: drivers[1] // Assign driver
+            },
+            amaze: {
+                name: "Honda Amaze",
+                price: 2500,
+                icon: "🇯🇵",
+                color: "#1abc9c",
+                capacity: "5 People",
+                transmission: "Manual",
+                fuel: "Petrol",
+                mileage: "20 km/l",
+                speed: "165 km/h",
+                engine: "1.2L i-VTEC",
+                driver: drivers[2] // Assign driver
+            },
+            elevate: {
+                name: "Honda Elevate",
+                price: 1200,
+                icon: "📈",
+                color: "#9b59b6",
+                capacity: "5 People",
+                transmission: "CVT",
+                fuel: "Petrol",
+                mileage: "17 km/l",
+                speed: "170 km/h",
+                engine: "1.5L i-VTEC",
+                driver: drivers[3] // Assign driver
+            },
+            city: {
+                name: "Honda City",
+                price: 10,
+                icon: "🏙️",
+                color: "#e67e22",
+                capacity: "5 People",
+                transmission: "CVT",
+                fuel: "Petrol",
+                mileage: "18 km/l",
+                speed: "180 km/h",
+                engine: "1.5L i-VTEC",
+                driver: drivers[4] // Assign driver
+            }
+        };
+
+        // Get car model from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        let carModel = urlParams.get('car') || 'model_s';
+        let currentCar = carData[carModel] || carData.model_s;
+        let timerInterval;
+        let paymentVerified = false;
+
+        // Generate UPI string
+        function generateUPIString(amount, carName) {
+            return `upi://pay?pa=prathamesh00491@okicici&pn=Car%20Rental&am=${amount}&tn=${encodeURIComponent(carName + ' Rental')}`;
+        }
+
+        // Generate QR code
+        function generateQRCode(text) {
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: text,
+                width: 180,
+                height: 180,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // Update page with car data
+        function updateCarDetails(car) {
+            // Update car details
+            document.getElementById('car-name').textContent = car.name;
+            // Set car image based on car model (match homepage)
+            const carImg = document.getElementById('car-img');
+            let imgSrc = 'assets/deals-1.png';
+            switch (car.name) {
+                case 'Mahindra Model S': imgSrc = 'assets/deals-1.png'; pricePerKm = 18; break;
+                case 'Mahindra Model E': imgSrc = 'assets/deals-2.png'; pricePerKm = 15; break;
+                case 'Mahindra Model Y': imgSrc = 'assets/deals-3.png'; pricePerKm = 12; break;
+                case 'Ford C5': imgSrc = 'assets/deals-4.png'; pricePerKm = 23; break;
+                case 'Ford C7': imgSrc = 'assets/deals-5.png'; pricePerKm = 25; break;
+                case 'Ford CX8': imgSrc = 'assets/deals-6.png'; pricePerKm = 18; break;
+                case 'Suzuki CX5': imgSrc = 'assets/deals-7.png'; pricePerKm = 13; break;
+                case 'Suzuki CX-30': imgSrc = 'assets/deals-8.png'; pricePerKm = 20; break;
+                case 'Suzuki CX-9': imgSrc = 'assets/deals-9.png'; pricePerKm = 18; break;
+                case 'Corolla': imgSrc = 'assets/deals-10.png'; pricePerKm = 18; break;
+                case 'Innova': imgSrc = 'assets/deals-11.png'; pricePerKm = 18; break;
+                case 'Fortuner': imgSrc = 'assets/deals-12.png'; pricePerKm = 18; break;
+                case 'Amaze': imgSrc = 'assets/deals-13.png'; pricePerKm = 13; break;
+                case 'Elevate': imgSrc = 'assets/deals-14.png'; pricePerKm = 20; break;
+                case 'City': imgSrc = 'assets/deals-15.png'; pricePerKm = 18; break;
+            }
+            carImg.src = imgSrc;
+            carImg.alt = car.name + ' image';
+            document.getElementById('capacity').textContent = car.capacity;
+            document.getElementById('transmission').textContent = car.transmission;
+            document.getElementById('fuel').textContent = car.fuel;
+            document.getElementById('mileage').textContent = car.mileage;
+            document.getElementById('speed').textContent = car.speed;
+            document.getElementById('engine').textContent = car.engine;
+            document.getElementById('price').textContent = pricePerKm;
+
+            // Generate QR code for one km by default
+            generateQRCode(generateUPIString(pricePerKm, car.name));
+
+            // Update amount display
+            document.getElementById('qr-amount-value').textContent = pricePerKm;
+
+            // Update driver information
+            document.getElementById('driver-name').textContent = car.driver.name;
+            document.getElementById('driver-contact').textContent = car.driver.contact;
+            document.getElementById('driver-rating').textContent = car.driver.rating;
+            document.getElementById('driver-languages').textContent = car.driver.languages;
+            document.getElementById('driver-availability').textContent = car.driver.availability;
+            document.getElementById('driver-experience').textContent = car.driver.experience;
+            // Update confirmation price and total
+            document.getElementById('confirmation-price').textContent = pricePerKm;
+            document.getElementById('confirmation-total').textContent = pricePerKm;
+
+            // Generate QR code for one day by default
+            generateQRCode(generateUPIString(car.price, car.name));
+
+            // Update amount display
+            document.getElementById('qr-amount-value').textContent = car.price;
+
+            // Update driver information
+            document.getElementById('driver-name').textContent = car.driver.name;
+            document.getElementById('driver-contact').textContent = car.driver.contact;
+            document.getElementById('driver-rating').textContent = car.driver.rating;
+            document.getElementById('driver-languages').textContent = car.driver.languages;
+            document.getElementById('driver-availability').textContent = car.driver.availability;
+            document.getElementById('driver-experience').textContent = car.driver.experience;
+        }
+
+        // Start payment timer
+        function startPaymentTimer() {
+            let timeLeft = 5 * 60; // 5 minutes in seconds
+            document.getElementById('payment-timer').style.display = 'block';
+
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerInterval = setInterval(function () {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+
+                document.getElementById('timer').textContent =
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    if (!paymentVerified) {
+                        alert('Payment time expired. Please restart the booking process.');
+                        resetPaymentProcess();
+                    }
+                }
+
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Reset payment process
+        function resetPaymentProcess() {
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.disabled = false;
+            });
+            document.getElementById('submit-booking').disabled = false;
+            document.getElementById('submit-booking').innerHTML = '<i class="ri-wallet-line"></i> Proceed to Payment';
+            document.getElementById('scan-prompt').style.display = 'none';
+            document.getElementById('simulate-btn').style.display = 'none';
+            document.getElementById('qr-amount').style.display = 'none';
+            document.getElementById('payment-verification').style.display = 'none';
+            document.getElementById('payment-timer').style.display = 'none';
+            const qrContainerEl = document.getElementById('qr-container');
+            if (qrContainerEl) {
+                qrContainerEl.style.display = 'none'; // hide again until next payment attempt
+                qrContainerEl.classList.add('pulse');
+            }
+
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            paymentVerified = false;
+        }
+
+        // Verify payment (simulation)
+        function verifyPayment() {
+            document.getElementById('payment-verification').style.display = 'block';
+            document.getElementById('simulate-btn').disabled = true;
+
+            // Simulate payment verification delay
+            setTimeout(function () {
+                paymentVerified = true;
+                document.getElementById('payment-verification').innerHTML =
+                    '<i class="ri-checkbox-circle-line" style="color:#27ae60"></i> Payment verified successfully!';
+
+                // Get booking details
+                const carName = document.getElementById('car-name').textContent;
+                const driverName = document.getElementById('driver-name').textContent;
+                const price = document.getElementById('price').textContent;
+                const userName = document.getElementById('user-name').value;
+                const userEmail = document.getElementById('user-email').value;
+                const userPhone = document.getElementById('user-phone').value;
+                const { distance: _d, fare: _f, days: bookingDays } = calculateFare();
+                const totalAmount = (parseInt(_f) > 0) ? _f : (bookingDays * price);
+
+                // Generate booking ID
+                const bookingId = 'CRB-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+
+                // Format date
+                const today = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const bookingDate = today.toLocaleDateString('en-US', options);
+
+                // Update confirmation details
+                document.getElementById('confirmation-car').textContent = carName;
+                document.getElementById('confirmation-model').textContent = carName;
+                document.getElementById('confirmation-price').textContent = price;
+                document.getElementById('confirmation-driver').textContent = driverName;
+                document.getElementById('confirmation-email').textContent = userEmail;
+                document.getElementById('booking-id').textContent = bookingId;
+                document.getElementById('booking-date').textContent = bookingDate;
+                document.getElementById('confirmation-days').textContent = bookingDays;
+                document.getElementById('confirmation-total').textContent = totalAmount;
+
+                // Show booking confirmation
+                document.getElementById('booking-confirmation').classList.add('show-confirmation');
+
+                // Stop the pulse animation
+                document.getElementById('qr-container').classList.remove('pulse');
+
+            }, 3000); // Simulate payment verification time
+        }
+
+        // Auto-fill booking form from localStorage if available
+        (function autofillBookingForm() {
+            const user = JSON.parse(localStorage.getItem('car_rental_user') || '{}');
+            if (user) {
+                if (user.name && document.getElementById('user-name')) {
+                    document.getElementById('user-name').value = user.name;
+                }
+                if (user.email && document.getElementById('user-email')) {
+                    document.getElementById('user-email').value = user.email;
+                }
+                if (user.contact && document.getElementById('user-phone')) {
+                    document.getElementById('user-phone').value = user.contact;
+                }
+            }
+        })();
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- City dropdown + fare logic (clean) ---
+            function populateCityDropdown(id) {
+                const select = document.getElementById(id);
+                if (!select) return;
+                select.innerHTML = '<option value="">Select City</option>' +
+                    cities.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
+
+            function getDistance(cityA, cityB) {
+                const i = cities.indexOf(cityA);
+                const j = cities.indexOf(cityB);
+                if (i === -1 || j === -1) return 0;
+                return distances[i][j];
+            }
+
+            function calculateFare() {
+                const pickup = document.getElementById('pickup-city').value;
+                const drop = document.getElementById('return-city').value;
+
+                // Determine number of days from pickup and return dates when available
+                let days = 1;
+                const pickupDateEl = document.getElementById('pickup-date');
+                const returnDateEl = document.getElementById('return-date');
+
+                if (pickupDateEl && returnDateEl && pickupDateEl.value && returnDateEl.value) {
+                    const p = new Date(pickupDateEl.value);
+                    const r = new Date(returnDateEl.value);
+                    const millisPerDay = 24 * 60 * 60 * 1000;
+                    // Use floor difference and include both pickup and return as separate days if desired
+                    let diffDays = Math.floor((r - p) / millisPerDay) + 1;
+                    if (isNaN(diffDays) || diffDays < 1) diffDays = 1;
+                    days = diffDays;
+                    // If booking-days input exists (backwards compatibility), keep it in sync
+                    const daysInput = document.getElementById('booking-days');
+                    if (daysInput) daysInput.value = days;
+                }
+
+                const distance = getDistance(pickup, drop);
+                const pricePerKm = parseInt(document.getElementById('price').textContent) || 0;
+                const fare = distance * pricePerKm * days;
+                const distEl = document.getElementById('distance-display');
+                const fareEl = document.getElementById('fare-display');
+                if (distEl) distEl.value = distance > 0 ? distance : '';
+                if (fareEl) fareEl.value = fare > 0 ? fare : '';
+                return { distance, fare, days };
+            }
+
+            populateCityDropdown('pickup-city');
+            populateCityDropdown('return-city');
+            // Prefill from query params if present
+            (function prefillFromQuery() {
+                const params = new URLSearchParams(window.location.search);
+                const pc = params.get('pickupCity');
+                const rc = params.get('returnCity');
+                const pd = params.get('pickupDate');
+                const rd = params.get('returnDate');
+                if (pc && cities.includes(pc)) document.getElementById('pickup-city').value = pc;
+                if (rc && cities.includes(rc)) document.getElementById('return-city').value = rc;
+                if (pd) document.getElementById('pickup-date').value = pd;
+                if (rd) document.getElementById('return-date').value = rd;
+            })();
+            // watch cities and dates
+            ['pickup-city', 'return-city', 'pickup-date', 'return-date'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', calculateFare);
+            });
+            // initial calc
+            calculateFare();
+            // --- End city dropdown logic ---
+            // Set up car model badges
+            document.querySelectorAll('.model-badge').forEach(badge => {
+                badge.addEventListener('click', function () {
+                    // Remove active class from all badges
+                    document.querySelectorAll('.model-badge').forEach(b => {
+                        b.classList.remove('active');
+                    });
+
+                    // Add active class to clicked badge
+                    this.classList.add('active');
+
+                    // Update car details
+                    const car = this.dataset.car;
+                    currentCar = carData[car];
+                    updateCarDetails(currentCar);
+                });
+            });
+
+            // Update page with initial car data
+            updateCarDetails(currentCar);
+
+            // Initialize payment process
+            const submitBtn = document.getElementById('submit-booking');
+            const simulateBtn = document.getElementById('simulate-btn');
+
+            let formSubmitted = false;
+
+            // Set up booking form submission
+            submitBtn.addEventListener('click', function () {
+                const userName = document.getElementById('user-name').value;
+                const userEmail = document.getElementById('user-email').value;
+                const userPhone = document.getElementById('user-phone').value;
+
+                if (!userName || !userEmail || !userPhone) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+
+                // Disable form and show scan prompt
+                document.querySelectorAll('.form-input').forEach(input => {
+                    input.disabled = true;
+                });
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Waiting for Payment...';
+
+                // Calculate total amount using calculated days
+                const { distance, fare, days } = calculateFare();
+                const totalAmount = fare || (currentCar.price * (days || 1));
+
+                // Update QR code with total amount
+                generateQRCode(generateUPIString(totalAmount, currentCar.name));
+
+                // Update displayed amount
+                document.getElementById('qr-amount-value').textContent = totalAmount;
+
+                // Show scan prompt and simulation button
+                document.getElementById('scan-prompt').style.display = 'block';
+                document.getElementById('simulate-btn').style.display = 'flex';
+                document.getElementById('qr-amount').style.display = 'block';
+                const qrContainerEl = document.getElementById('qr-container');
+                if (qrContainerEl) qrContainerEl.style.display = 'flex';
+
+                // Start the payment timer
+                startPaymentTimer();
+
+                formSubmitted = true;
+            });
+
+            // Set up QR code simulation button
+            simulateBtn.addEventListener('click', function () {
+                if (!formSubmitted) return;
+
+                // Hide the simulate button
+                simulateBtn.style.display = 'none';
+
+                // Verify payment
+                verifyPayment();
+            });
+
+            // --- Custom dynamic amount QR generation ---
+            const customAmountInput = document.getElementById('custom-amount');
+            const customBtn = document.getElementById('generate-custom-qr');
+            const qrContainer = document.getElementById('qr-container');
+            const scanPrompt = document.getElementById('scan-prompt');
+            const qrAmountWrap = document.getElementById('qr-amount');
+            const qrAmountValueEl = document.getElementById('qr-amount-value');
+
+            function generateCustomAmountQR() {
+                const rawVal = (customAmountInput.value || '').trim();
+                const amount = parseFloat(rawVal);
+                if (!amount || amount <= 0) {
+                    alert('Please enter a valid positive amount');
+                    return;
+                }
+                // Generate UPI link & QR
+                generateQRCode(generateUPIString(amount, currentCar.name));
+                // Update visible amount
+                qrAmountValueEl.textContent = amount;
+                // Ensure related UI pieces visible
+                if (qrContainer) qrContainer.style.display = 'flex';
+                if (scanPrompt) scanPrompt.style.display = 'block';
+                if (qrAmountWrap) qrAmountWrap.style.display = 'block';
+            }
+            if (customBtn) customBtn.addEventListener('click', generateCustomAmountQR);
+            // Allow pressing Enter in custom amount field
+            if (customAmountInput) {
+                customAmountInput.addEventListener('keyup', e => {
+                    if (e.key === 'Enter') generateCustomAmountQR();
+                });
+            }
+            // --- End custom dynamic amount QR generation ---
+        });
+    </script>
+</body>
+
+</html>

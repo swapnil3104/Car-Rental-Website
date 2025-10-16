@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css\lstyle.css">
+
+    <!-- Firebase v8 SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKc-imbFRAM9p1fjvDcs4vwCtQySDhkQE",
+            authDomain: "car1-dbe21.firebaseapp.com",
+            projectId: "car1-dbe21",
+            storageBucket: "car1-dbe21.firebasestorage.app",
+            messagingSenderId: "1007776406913",
+            appId: "1:1007776406913:web:5c59ad766b7d9f66ec1c80"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="email" placeholder="Email" id="login-email" required>
+            <input type="password" placeholder="Password" id="login-password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="register.html">Register</a></p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Always fetch username and mobile from Firestore
+                    const uid = userCredential.user.uid;
+                    firebase.firestore().collection('users').doc(uid).get()
+                        .then(doc => {
+                            let name = '';
+                            let contact = '';
+                            if (doc.exists) {
+                                if (doc.data().username) name = doc.data().username;
+                                if (doc.data().mobile) contact = doc.data().mobile;
+                            }
+                            // Store user info in localStorage
+                            localStorage.setItem('car_rental_user', JSON.stringify({
+                                name: name,
+                                email: email,
+                                contact: contact
+                            }));
+                            window.location.href = 'index.html';
+                        })
+                        .catch(() => {
+                            // Fallback: store only email
+                            localStorage.setItem('car_rental_user', JSON.stringify({
+                                name: '',
+                                email: email,
+                                contact: ''
+                            }));
+                            window.location.href = 'index.html';
+                        });
+                })
+                .catch((error) => {
+                    alert('Login failed: ' + error.message);
+                    console.error(error);
+                });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.body.classList.add('debug');
+            console.log('Debug mode active - CSS should be visible');
+        });
+    </script>
+    <script src="js\main.js"></script>
+    <script src="js\new.js"></script>
+</body>
+
+</html>
